@@ -1,6 +1,7 @@
 package com.bjpowernode.workbench.service;
 
 import com.bjpowernode.workbench.beans.Act;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 
 import java.util.List;
 import java.util.Map;
@@ -28,4 +29,5 @@ public interface ActService {
 
     Act queryActById(String id);
 
+    Act queryActForDetailByActId(String id);
 }

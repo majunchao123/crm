@@ -155,35 +155,47 @@ public class ActController {
                 row = sheet.createRow(i + 1);
                 cell = row.createCell(0);
                 cell.setCellValue(act.getId());
-                cell=row.createCell(1);
+                cell = row.createCell(1);
                 cell.setCellValue(act.getOwner());
-                cell=row.createCell(2);
+                cell = row.createCell(2);
                 cell.setCellValue(act.getName());
-                cell=row.createCell(3);
+                cell = row.createCell(3);
                 cell.setCellValue(act.getStartDate());
-                cell=row.createCell(4);
+                cell = row.createCell(4);
                 cell.setCellValue(act.getEndDate());
-                cell=row.createCell(5);
+                cell = row.createCell(5);
                 cell.setCellValue(act.getCost());
-                cell=row.createCell(6);
+                cell = row.createCell(6);
                 cell.setCellValue(act.getDescription());
-                cell=row.createCell(7);
+                cell = row.createCell(7);
                 cell.setCellValue(act.getCreateTime());
-                cell=row.createCell(8);
+                cell = row.createCell(8);
                 cell.setCellValue(act.getCreateBy());
-                cell=row.createCell(9);
+                cell = row.createCell(9);
                 cell.setCellValue(act.getEditTime());
-                cell=row.createCell(10);
+                cell = row.createCell(10);
                 cell.setCellValue(act.getEditBy());
             }
         }
         //把生成的excel文件下载到客户端
         response.setContentType("application/octet-stream;charset=UTF-8");
-        response.addHeader("Content-Disposition","attachment;filename=activityList.xls");
+        response.addHeader("Content-Disposition", "attachment;filename=activityList.xls");
         ServletOutputStream out = response.getOutputStream();
 
         wb.write(out);
         wb.close();
         out.flush();
     }
+
+    @RequestMapping("workbench/activity/detailActivity.do")
+    public String detailActivity(String id,HttpServletRequest request) {
+        Act act = actService.queryActForDetailByActId(id);
+
+
+        request.setAttribute("activity",act);
+
+        return "workbench/activity/detail";
+    }
+
+
 }

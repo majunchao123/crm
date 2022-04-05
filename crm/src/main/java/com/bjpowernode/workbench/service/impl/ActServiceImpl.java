@@ -46,4 +46,8 @@ public class ActServiceImpl implements ActService {
     public Act queryActById(String id) {
         return actMapper.selectByPrimaryKey(id);
     }
+
+    public Act queryActForDetailByActId(String id) {
+        return actMapper.selectActForDetailByActId(id);
+    }
 }

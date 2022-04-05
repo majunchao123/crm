@@ -76,7 +76,7 @@ public interface ActMapper {
      */
     List<Act> selectAllAct();
 
-
     int deleteActByIds(String[] id);
 
+    Act selectActForDetailByActId(String id);
 }
