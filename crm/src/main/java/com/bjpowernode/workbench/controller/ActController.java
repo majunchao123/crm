@@ -7,6 +7,8 @@ import com.bjpowernode.commons.utils.UUIDUtils;
 import com.bjpowernode.settings.beans.User;
 import com.bjpowernode.settings.service.UserService;
 import com.bjpowernode.workbench.beans.Act;
+import com.bjpowernode.workbench.beans.ActRemark;
+import com.bjpowernode.workbench.service.ActRemarkService;
 import com.bjpowernode.workbench.service.ActService;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -41,6 +43,9 @@ public class ActController {
     UserService userService;
     @Autowired
     ActService actService;
+
+    @Autowired
+    ActRemarkService actRemarkService;
 
 
     @RequestMapping("/workbench/activity/index.do")
@@ -190,10 +195,10 @@ public class ActController {
     @RequestMapping("workbench/activity/detailActivity.do")
     public String detailActivity(String id,HttpServletRequest request) {
         Act act = actService.queryActForDetailByActId(id);
-
+        List<ActRemark> remarkList = actRemarkService.queryActListByActId(id);
 
         request.setAttribute("activity",act);
-
+        request.setAttribute("remarkList",remarkList);
         return "workbench/activity/detail";
     }
 

@@ -52,6 +52,7 @@ public interface ActRemarkMapper {
      * @mbggenerated Tue Apr 05 23:23:56 CST 2022
      */
     int updateByPrimaryKey(ActRemark record);
+
     List<ActRemark> selectActListByActId(String id);
 
 

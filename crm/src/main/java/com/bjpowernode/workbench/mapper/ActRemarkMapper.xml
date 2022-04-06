@@ -165,4 +165,17 @@
       activity_id = #{activityId,jdbcType=CHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
+
+
+  <select id="selectActListByActId" parameterType="String" resultMap="BaseResultMap">
+    select  *
+
+    from tbl_activity_remark
+
+    where activity_id = #{id}
+
+  </select>
+
+
+
 </mapper>

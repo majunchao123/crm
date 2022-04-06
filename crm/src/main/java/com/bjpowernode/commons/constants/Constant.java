@@ -14,6 +14,12 @@ public class Constant {
 
     public static final String SESSION_USER ="sessionUser";
 
+    //没有修改
+    public static final String EDIT_FLAG_NO="0";
+
+    //修改了
+    public static final String EDIT_FLAG_YES="1";
+
 
 
 }
