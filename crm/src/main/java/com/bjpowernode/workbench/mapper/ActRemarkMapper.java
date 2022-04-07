@@ -57,4 +57,6 @@ public interface ActRemarkMapper {
 
 
     int deleteActRemarkById(String id);
+
+    int updateActRemark(ActRemark remark);
 }

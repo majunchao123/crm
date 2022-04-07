@@ -93,8 +93,8 @@
                             htmlStr += "<div id=\"div_" + data.otherData.id + "\" class=\"remarkDiv\" style=\"height: 60px;\">";
                             htmlStr += "<img title=\"${sessionScope.sessionUser.name}\" src=\"image/user-thumbnail.png\" style=\"width: 30px; height:30px;\">";
                             htmlStr += "<div style=\"position: relative; top: -40px; left: 40px;\" >";
-                            htmlStr += "<h5>" + data.otherData.noteContent + "</h5>";
-                            htmlStr += "<font color=\"gray\">市场活动</font> <font color=\"gray\">-</font> <b>${activity.name}</b> <small style=\"color: gray;\"> " + data.otherData.createTime + " 由${sessionScope.sessionUser.name}创建</small>";
+                            htmlStr += "<h5 id=\"h5_" + data.otherData.id + "\">" + data.otherData.noteContent + "</h5>";
+                            htmlStr += "<font color=\"gray\">市场活动</font> <font color=\"gray\">-</font> <b>${activity.name}</b> <small id=\"small_" + data.otherData.id + "\" style=\"color: gray;\"> " + data.otherData.createTime + " 由${sessionScope.sessionUser.name}创建</small>";
                             htmlStr += "<div style=\"position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;\">";
                             htmlStr += "<a class=\"myHref\" name=\"editA\" remarkId=\"" + data.otherData.id + "\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>";
                             htmlStr += "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -110,29 +110,85 @@
                 })
             })
             //给所有'删除'的图标添加单击事件
-            $("#remarkDivList").on("click","a[name='deleteA']",function () {
+            $("#remarkDivList").on("click", "a[name='deleteA']", function () {
                 //收集参数
-              var id = $(this).attr("remarkId");
+                var id = $(this).attr("remarkId");
 
-              //发送ajax请求
+                //发送ajax请求
                 $.ajax({
-                    url:'workbench/activity/deleteActRemark.do',
+                    url: 'workbench/activity/deleteActRemark.do',
                     data: {
-                        id:id
+                        id: id
                     },
-                    type:'post',
+                    type: 'post',
                     dataType: 'json',
-                    success:function (data) {
-                        if (data.code=='1'){
+                    success: function (data) {
+                        if (data.code == '1') {
                             //刷新备注页面
-                            $("#div_"+id).remove();
-                        }else {
+                            $("#div_" + id).remove();
+                        } else {
                             alert(data.message);
                         }
                     }
                 })
             })
 
+
+            //给所有’修改‘图标添加单击事件
+            $("#remarkDivList").on("click", "a[name='editA']", function () {
+                //获取备注的id和noteContent属性
+                var id = $(this).attr("remarkId");
+                var noteContent = $("#h5_" + id).text();
+                //把备注的id和notecontent写到修改备注的模态窗口中
+                $("#edit-id").val(id);
+                $("#edit-noteContent").val(noteContent)
+                //弹出模态窗口
+                $("#editRemarkModal").modal("show");
+            })
+
+            //给更新模态窗口添加单击事件
+            $("#updateRemarkBtn").click(function () {
+                //收集参数
+                var id = $("#edit-id").val();
+                var noteContent = $.trim($("#edit-noteContent").val());
+
+                //表单校验
+                if (noteContent == "") {
+                    alert("备注内容不能为空")
+                    return;
+                }
+                //发送请求
+                $.ajax({
+                    url: 'workbench/activity/saveEditActivityRemark.do',
+                    data: {
+                        id: id,
+                        noteContent: noteContent,
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.code=="1"){
+                            //关闭模态窗口
+                            $("#editRemarkModal").modal("hide");
+                            //刷新备注
+                            $("#h5_"+id).text(noteContent);
+                            $("#small_"+id).text(""+data.otherData.editTime+" 由${sessionScope.sessionUser.name}修改");
+
+                        }else {
+                            //提示信息
+                            alert(data.message);
+                            //模态窗口不关闭
+                            $("#editRemarkModal").modal("show");
+                        }
+
+
+                    }
+
+
+                })
+
+
+            })
         });
     </script>
 </head>
@@ -152,10 +208,11 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" role="form">
+                    <input type="hidden" id="edit-id">
                     <div class="form-group">
-                        <label for="noteContent" class="col-sm-2 control-label">内容</label>
+                        <label for="edit-noteContent" class="col-sm-2 control-label">内容</label>
                         <div class="col-sm-10" style="width: 81%;">
-                            <textarea class="form-control" rows="3" id="noteContent"></textarea>
+                            <textarea class="form-control" rows="3" id="edit-noteContent"></textarea>
                         </div>
                     </div>
                 </form>
@@ -214,12 +271,16 @@
     </div>
     <div style="position: relative; left: 40px; height: 30px; top: 30px;">
         <div style="width: 300px; color: gray;">创建者</div>
-        <div style="width: 500px;position: relative; left: 200px; top: -20px;"><b>${activity.createBy}&nbsp;&nbsp;</b><small style="font-size: 10px; color: gray;">${activity.createTime}</small></div>
+        <div style="width: 500px;position: relative; left: 200px; top: -20px;">
+            <b>${activity.createBy}&nbsp;&nbsp;</b><small
+                style="font-size: 10px; color: gray;">${activity.createTime}</small></div>
         <div style="height: 1px; width: 550px; background: #D5D5D5; position: relative; top: -20px;"></div>
     </div>
     <div style="position: relative; left: 40px; height: 30px; top: 40px;">
         <div style="width: 300px; color: gray;">修改者</div>
-        <div style="width: 500px;position: relative; left: 200px; top: -20px;"><b>${activity.editBy}&nbsp;&nbsp;</b><small style="font-size: 10px; color: gray;">${activity.editTime}</small></div>
+        <div style="width: 500px;position: relative; left: 200px; top: -20px;">
+            <b>${activity.editBy}&nbsp;&nbsp;</b><small
+                style="font-size: 10px; color: gray;">${activity.editTime}</small></div>
         <div style="height: 1px; width: 550px; background: #D5D5D5; position: relative; top: -20px;"></div>
     </div>
     <div style="position: relative; left: 40px; height: 30px; top: 50px;">
@@ -242,13 +303,18 @@
         <div id="div_${remark.id}" class="remarkDiv" style="height: 60px;">
             <img title="${remark.createBy}" src="image/user-thumbnail.png" style="width: 30px; height:30px;">
             <div style="position: relative; top: -40px; left: 40px;">
-                <h5>${remark.noteContent}</h5>
-                <font color="gray">市场活动</font> <font color="gray">-</font> <b>${activity.name}</b> <small style="color: gray;">
-                    ${remark.editFlag=='1'?remark.editTime:remark.createTime} 由${remark.editFlag=='1'?remark.editBy:remark.createBy}${remark.editFlag=='1'?'修改':'创建'}</small>
+                <h5 id="h5_${remark.id}">${remark.noteContent}</h5>
+                <font color="gray">市场活动</font> <font color="gray">-</font> <b>${activity.name}</b>
+                <small id="small_${remark.id}"
+                    style="color: gray;">
+                    ${remark.editFlag=='1'?remark.editTime:remark.createTime}
+                由${remark.editFlag=='1'?remark.editBy:remark.createBy}${remark.editFlag=='1'?'修改':'创建'}</small>
                 <div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">
-                    <a class="myHref" name="editA" remarkId="${remark.id}" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>
+                    <a class="myHref" name="editA" remarkId="${remark.id}" href="javascript:void(0);"><span
+                            class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a class="myHref" name="deleteA" remarkId="${remark.id}" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>
+                    <a class="myHref" name="deleteA" remarkId="${remark.id}" href="javascript:void(0);"><span
+                            class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>
                 </div>
             </div>
         </div>
