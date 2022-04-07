@@ -37,30 +37,28 @@
                 cancelAndSaveBtnDefault = true;
             });
 
-            $("#remarkDivList").on("mouseover",".remarkDiv",function () {
+
+            $("#remarkDivList").on("mouseover", ".remarkDiv", function () {
                 $(this).children("div").children("div").show();
             });
-
-
             /*$(".remarkDiv").mouseout(function(){
                 $(this).children("div").children("div").hide();
             });*/
-            $("#remarkDivList").on("mouseout",".remarkDiv",function () {
+            $("#remarkDivList").on("mouseout", ".remarkDiv", function () {
                 $(this).children("div").children("div").hide();
             });
-
             /*$(".myHref").mouseover(function(){
                 $(this).children("span").css("color","red");
             });*/
-            $("#remarkDivList").on("mouseover",".myHref",function () {
-                $(this).children("span").css("color","red");
+            $("#remarkDivList").on("mouseover", ".myHref", function () {
+                $(this).children("span").css("color", "red");
             });
 
             /*$(".myHref").mouseout(function(){
                 $(this).children("span").css("color","#E6E6E6");
             });*/
-            $("#remarkDivList").on("mouseout",".myHref",function () {
-                $(this).children("span").css("color","#E6E6E6");
+            $("#remarkDivList").on("mouseout", ".myHref", function () {
+                $(this).children("span").css("color", "#E6E6E6");
             });
 
 
@@ -80,41 +78,63 @@
 
                 //发送请求
                 $.ajax({
-                    url:'workbench/activity/saveCreateActivityRemark.do',
-                    data:{
-                        noteContent:noteContent,
-                        activityId:activityId,
+                    url: 'workbench/activity/saveCreateActivityRemark.do',
+                    data: {
+                        noteContent: noteContent,
+                        activityId: activityId,
                     },
-                    type:'post',
-                    dataType:'json',
-                    success:function (data) {
-                        if (data.code=="1"){
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.code == "1") {
                             //清空输入框
                             $("#remark").val("");
-                            var htmlStr="";
-                            htmlStr+="<div id=\"div_"+data.otherData.id+"\" class=\"remarkDiv\" style=\"height: 60px;\">";
-                            htmlStr+="<img title=\"${sessionScope.sessionUser.name}\" src=\"image/user-thumbnail.png\" style=\"width: 30px; height:30px;\">";
-                            htmlStr+="<div style=\"position: relative; top: -40px; left: 40px;\" >";
-                            htmlStr+="<h5>"+data.otherData.noteContent+"</h5>";
-                            htmlStr+="<font color=\"gray\">市场活动</font> <font color=\"gray\">-</font> <b>${activity.name}</b> <small style=\"color: gray;\"> "+data.otherData.createTime+" 由${sessionScope.sessionUser.name}创建</small>";
-                            htmlStr+="<div style=\"position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;\">";
-                            htmlStr+="<a class=\"myHref\" name=\"editA\" remarkId=\""+data.otherData.id+"\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>";
-                            htmlStr+="&nbsp;&nbsp;&nbsp;&nbsp;";
-                            htmlStr+="<a class=\"myHref\" name=\"deleteA\" remarkId=\""+data.otherData.id+"\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>";
-                            htmlStr+="</div>";
-                            htmlStr+="</div>";
-                            htmlStr+="</div>";
+                            var htmlStr = "";
+                            htmlStr += "<div id=\"div_" + data.otherData.id + "\" class=\"remarkDiv\" style=\"height: 60px;\">";
+                            htmlStr += "<img title=\"${sessionScope.sessionUser.name}\" src=\"image/user-thumbnail.png\" style=\"width: 30px; height:30px;\">";
+                            htmlStr += "<div style=\"position: relative; top: -40px; left: 40px;\" >";
+                            htmlStr += "<h5>" + data.otherData.noteContent + "</h5>";
+                            htmlStr += "<font color=\"gray\">市场活动</font> <font color=\"gray\">-</font> <b>${activity.name}</b> <small style=\"color: gray;\"> " + data.otherData.createTime + " 由${sessionScope.sessionUser.name}创建</small>";
+                            htmlStr += "<div style=\"position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;\">";
+                            htmlStr += "<a class=\"myHref\" name=\"editA\" remarkId=\"" + data.otherData.id + "\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-edit\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>";
+                            htmlStr += "&nbsp;&nbsp;&nbsp;&nbsp;";
+                            htmlStr += "<a class=\"myHref\" name=\"deleteA\" remarkId=\"" + data.otherData.id + "\" href=\"javascript:void(0);\"><span class=\"glyphicon glyphicon-remove\" style=\"font-size: 20px; color: #E6E6E6;\"></span></a>";
+                            htmlStr += "</div>";
+                            htmlStr += "</div>";
+                            htmlStr += "</div>";
                             $("#remarkDiv").before(htmlStr);
-                        }else {
+                        } else {
                             alert(data.message)
                         }
                     }
                 })
             })
+            //给所有'删除'的图标添加单击事件
+            $("#remarkDivList").on("click","a[name='deleteA']",function () {
+                //收集参数
+              var id = $(this).attr("remarkId");
+
+              //发送ajax请求
+                $.ajax({
+                    url:'workbench/activity/deleteActRemark.do',
+                    data: {
+                        id:id
+                    },
+                    type:'post',
+                    dataType: 'json',
+                    success:function (data) {
+                        if (data.code=='1'){
+                            //刷新备注页面
+                            $("#div_"+id).remove();
+                        }else {
+                            alert(data.message);
+                        }
+                    }
+                })
+            })
+
         });
-
     </script>
-
 </head>
 <body>
 
@@ -172,42 +192,34 @@
 <div style="position: relative; top: -70px;">
     <div style="position: relative; left: 40px; height: 30px;">
         <div style="width: 300px; color: gray;">所有者</div>
-        <div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>${activity.owner}</b>
-        </div>
+        <div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>${activity.owner}</b></div>
         <div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">名称</div>
-        <div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>${activity.name}</b>
-        </div>
+        <div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>${activity.name}</b></div>
         <div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
         <div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
     </div>
 
     <div style="position: relative; left: 40px; height: 30px; top: 10px;">
         <div style="width: 300px; color: gray;">开始日期</div>
-        <div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>${activity.startDate}</b>
-        </div>
+        <div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>${activity.startDate}</b></div>
         <div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">结束日期</div>
-        <div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>${activity.endDate}</b>
-        </div>
+        <div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>${activity.endDate}</b></div>
         <div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
         <div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
     </div>
     <div style="position: relative; left: 40px; height: 30px; top: 20px;">
         <div style="width: 300px; color: gray;">成本</div>
-        <div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>${activity.cost}</b>
-        </div>
+        <div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>${activity.cost}</b></div>
         <div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -20px;"></div>
     </div>
     <div style="position: relative; left: 40px; height: 30px; top: 30px;">
         <div style="width: 300px; color: gray;">创建者</div>
-        <div style="width: 500px;position: relative; left: 200px; top: -20px;"><b>${activity.createBy}&nbsp;&nbsp;</b><small
-                style="font-size: 10px; color: gray;">${activity.createTime}</small></div>
+        <div style="width: 500px;position: relative; left: 200px; top: -20px;"><b>${activity.createBy}&nbsp;&nbsp;</b><small style="font-size: 10px; color: gray;">${activity.createTime}</small></div>
         <div style="height: 1px; width: 550px; background: #D5D5D5; position: relative; top: -20px;"></div>
     </div>
     <div style="position: relative; left: 40px; height: 30px; top: 40px;">
         <div style="width: 300px; color: gray;">修改者</div>
-        <div style="width: 500px;position: relative; left: 200px; top: -20px;">
-            <b>${activity.editBy}</b><small
-                style="font-size: 10px; color: gray;">${activity.editTime}</small></div>
+        <div style="width: 500px;position: relative; left: 200px; top: -20px;"><b>${activity.editBy}&nbsp;&nbsp;</b><small style="font-size: 10px; color: gray;">${activity.editTime}</small></div>
         <div style="height: 1px; width: 550px; background: #D5D5D5; position: relative; top: -20px;"></div>
     </div>
     <div style="position: relative; left: 40px; height: 30px; top: 50px;">
@@ -220,9 +232,8 @@
         <div style="height: 1px; width: 850px; background: #D5D5D5; position: relative; top: -20px;"></div>
     </div>
 </div>
-
 <!-- 备注 -->
-<div style="position: relative; top: 30px; left: 40px;">
+<div id="remarkDivList" style="position: relative; top: 30px; left: 40px;">
     <div class="page-header">
         <h4>备注</h4>
     </div>
@@ -232,13 +243,12 @@
             <img title="${remark.createBy}" src="image/user-thumbnail.png" style="width: 30px; height:30px;">
             <div style="position: relative; top: -40px; left: 40px;">
                 <h5>${remark.noteContent}</h5>
-                <font color="gray">市场活动</font> <font color="gray">-</font> <b>${activity.name}</b> <small
-                    style="color: gray;"> ${remark.createTime} 由${remark.createBy}</small>
+                <font color="gray">市场活动</font> <font color="gray">-</font> <b>${activity.name}</b> <small style="color: gray;">
+                    ${remark.editFlag=='1'?remark.editTime:remark.createTime} 由${remark.editFlag=='1'?remark.editBy:remark.createBy}${remark.editFlag=='1'?'修改':'创建'}</small>
                 <div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">
-                    <a class="myHref" name="editA" remarkId="${remark.id}" href="javascript:void(0);"><span
-                            class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>
-                    <a class="myHref" name="deleteA" remarkId="${remark.id}" href="javascript:void(0);"><span
-                            class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>
+                    <a class="myHref" name="editA" remarkId="${remark.id}" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #E6E6E6;"></span></a>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a class="myHref" name="deleteA" remarkId="${remark.id}" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>
                 </div>
             </div>
         </div>

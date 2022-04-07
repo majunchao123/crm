@@ -271,4 +271,14 @@ JOIN tbl_user u1 ON a.owner = u1.id
       #{id}
     </foreach>
   </delete>
+
+
+
+  <select id="selectActForDetailByActId" parameterType="String" resultMap="BaseResultMap">
+    select a.id,a.name,a.start_date,a.end_date,a.cost,a.description,a.create_time,a.create_by,a.edit_time,a.edit_by,
+    u.name as owner
+    from tbl_activity a
+    join tbl_user u on a.owner = u.id
+    where a.id = #{id}
+  </select>
 </mapper>
