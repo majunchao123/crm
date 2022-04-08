@@ -202,5 +202,23 @@ public class ActController {
         return "workbench/activity/detail";
     }
 
+    @RequestMapping("workbench/activity/saveEditAct.do")
+    @ResponseBody
+    public Object saveEditActDo(Act act,HttpSession session){
+        ReturnObject returnObject = new ReturnObject();
+        User user = (User) session.getAttribute(Constant.SESSION_USER);
+        act.setEditBy(user.getName());
+        act.setCreateTime(DateUtils.formatDateAndTime(new Date()));
+        int i = actService.saveEditAct(act);
+        if (i>0){
+            returnObject.setCode("1");
+
+        }else {
+            returnObject.setCode("0");
+            returnObject.setMessage("系统繁忙,稍后再试");
+        }
+        return returnObject;
+    }
+
 
 }

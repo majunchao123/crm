@@ -307,4 +307,71 @@
       address = #{address,jdbcType=VARCHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
+
+  <select id="selectClueListByPage" parameterType="map" resultMap="BaseResultMap">
+    select c.fullname,v1.value as appellation,u1.name as owner,c.company,
+       c.phone,c.mphone,v2.value as state, v3.value as source
+    from tbl_clue c
+    left join tbl_dic_value v1 on c.appellation=v1.id
+    join tbl_user u1 on c.owner=u1.id
+    left join tbl_dic_value v2 on c.state=v2.id
+    left join tbl_dic_value v3 on c.source=v3.id
+    <where>
+      <if test="fullname!=null and fullname!=''">
+        and c.fullname like '%' #{fullname} '%'
+      </if>
+      <if test="company!=null and company!=''">
+        and c.company like '%' #{company} '%'
+      </if>
+      <if test="mphone!=null and mphone!=''">
+        and c,mphone like '%' #{mphone} '%'
+      </if>
+      <if test="state!=null and state!=''">
+        and v2.value like '%' #{state} '%'
+      </if>
+      <if test="source!=null and source!=''">
+        and v3.value like '%' #{source} '%'
+      </if>
+      <if test="phone!=null and phone!=''">
+        and phone like '%' #{phone} '%'
+      </if>
+      <if test="owner!=null and owner!=''">
+        and u1.name like '%' #{owner} '%'
+      </if>
+    </where>
+    order by create_time
+    limit #{beginNo},#{pageSize}
+  </select>
+
+  <select id="selectCountClueListByPage" parameterType="map" resultType="int">
+    select count(*)
+    from tbl_clue c
+    left join tbl_dic_value v1 on c.appellation=v1.id
+    join tbl_user u1 on c.owner=u1.id
+    left join tbl_dic_value v2 on c.state=v2.id
+    left join tbl_dic_value v3 on c.source=v3.id
+    <where>
+      <if test="fullname!=null and fullname!=''">
+        and c.fullname like '%' #{fullname} '%'
+      </if>
+      <if test="company!=null and company!=''">
+        and c.company like '%' #{company} '%'
+      </if>
+      <if test="mphone!=null and mphone!=''">
+        and c,mphone like '%' #{mphone} '%'
+      </if>
+      <if test="state!=null and state!=''">
+        and v2.value like '%' #{state} '%'
+      </if>
+      <if test="source!=null and source!=''">
+        and v3.value like '%' #{source} '%'
+      </if>
+      <if test="phone!=null and phone!=''">
+        and phone like '%' #{phone} '%'
+      </if>
+      <if test="owner!=null and owner!=''">
+        and u1.name like '%' #{owner} '%'
+      </if>
+    </where>
+  </select>
 </mapper>

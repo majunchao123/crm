@@ -50,4 +50,8 @@ public class ActServiceImpl implements ActService {
     public Act queryActForDetailByActId(String id) {
         return actMapper.selectActForDetailByActId(id);
     }
+
+    public int saveEditAct(Act act) {
+        return actMapper.updateAct(act);
+    }
 }

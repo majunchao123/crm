@@ -24,15 +24,36 @@
     <script type="text/javascript">
 
         $(function () {
-            //重置表单
-            $("#createActivityForm").get(0).reset();
+            //全选按钮控制 checkbox
+            $("#checkAll").click(function () {
+                $("#tBody input[type='checkbox']").prop("checked", this.checked)
+            })
+
+            //当容器加载完成之后，对容器调用工具函数
+            $("input[name='mydate']").datetimepicker({
+                // $(".mydate").datetimepicker({
+                language: 'zh-CN', //语言
+                format: 'yyyy-mm-dd',//日期的格式
+                minView: 'month', //可以选择的最小视图
+                initialDate: new Date(),//初始化显示的日期
+                autoclose: true,//设置选择完日期或者时间之后，日否自动关闭日历
+                todayBtn: true,//设置是否显示"今天"按钮,默认是false
+                clearBtn: true//设置是否显示"清空"按钮，默认是false
+            });
+
+
+            //加载页面刷新活动
+            queryActivityByConditionForPage(1, 10);
+
             //"创建"按钮添加单击事件
             $("#createActBtn").click(function () {
+                //重置表单
+                $("#createActivityForm").get(0).reset();
                 //弹出创建市场活动的窗口
                 $("#createActivityModal").modal("show")
             });
 
-
+            //"保存"按钮单击事件
             $("#saveActBtn").click(function () {
                 //收集参数
                 var owner = $.trim($("#create-marketActivityOwner").val());
@@ -89,31 +110,12 @@
                 })
             })
 
-            //当容器加载完成之后，对容器调用工具函数
-            $("input[name='mydate']").datetimepicker({
-                // $(".mydate").datetimepicker({
-                language: 'zh-CN', //语言
-                format: 'yyyy-mm-dd',//日期的格式
-                minView: 'month', //可以选择的最小视图
-                initialDate: new Date(),//初始化显示的日期
-                autoclose: true,//设置选择完日期或者时间之后，日否自动关闭日历
-                todayBtn: true,//设置是否显示"今天"按钮,默认是false
-                clearBtn: true//设置是否显示"清空"按钮，默认是false
-            });
-
-            queryActivityByConditionForPage(1, 10);
-
-
+            //查询按钮单击事件
             $("#query-Btn").click(function () {
                 queryActivityByConditionForPage(1, $("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
             })
 
-            //全选按钮控制 checkbox
-            $("#checkAll").click(function () {
-                $("#tBody input[type='checkbox']").prop("checked", this.checked)
-            })
-
-
+            //单击按钮的控制事件
             $("#tBody").on("click", "input[type='checkbox']", function () {
                 //如果列表中的所有checkbox都选中，则"全选"按钮也选中
                 if ($("#tBody input[type='checkbox']").size() == $("#tBody input[type='checkbox']:checked").size()) {
@@ -122,6 +124,7 @@
                     $("#checkAll").prop("checked", false);
                 }
             });
+
 
             //给"删除"添加单击事件
             $("#delectActBtn").click(function () {
@@ -137,7 +140,7 @@
 
                 if (window.confirm("确定删除吗?")) {
                     $.each(checkedIds, function () {
-                        ids+="id="+this.value + "&";
+                        ids += "id=" + this.value + "&";
                     })
                     ids = ids.substr(0, ids.length - 1);
 
@@ -161,38 +164,99 @@
 
                 //获取列表中被选中的checkbox
                 var checkedIds = $("#tBody input[type='checkbox']:checked");
-                if (checkedIds.length==0){
+                if (checkedIds.length == 0) {
                     alert("请选择要修改的活动");
                     return;
-                }else if (checkedIds.length>1){
+                } else if (checkedIds.length > 1) {
                     alert("每次只能修改一次活动");
                     return;
                 }
-                var id=checkedIds[0].value;
+                var id = checkedIds[0].value;
                 $.ajax({
-                    url:'workbench/activity/queryActById.do',
-                    data:{
-                        id:id
+                    url: 'workbench/activity/queryActById.do',
+                    data: {
+                        id: id
                     },
                     type: 'post',
                     dataType: 'json',
-                    success:function (data) {
-                            //把市场活动的信息显示在修改的模态窗口上
-                            $("#edit-marketActivityOwner").val(data.owner);
-                            $("#edit-marketActivityName").val(data.name);
-                            $("#edit-startDate").val(data.startDate);
-                            $("#edit-endDate").val(data.endDate);
-                            $("#edit-cost").val(data.cost);
-                            $("#edit-description").val(data.description);
-                            //显示修改窗口
-                            $("#editActivityModal").modal("show");
+                    success: function (data) {
+                        //把市场活动的信息显示在修改的模态窗口上
+                        $("#edit-id").val(data.id);
+                        $("#edit-marketActivityOwner").val(data.owner);
+                        $("#edit-marketActivityName").val(data.name);
+                        $("#edit-startDate").val(data.startDate);
+                        $("#edit-endDate").val(data.endDate);
+                        $("#edit-cost").val(data.cost);
+                        $("#edit-description").val(data.description);
+
+
+                        //显示修改窗口
+                        $("#editActivityModal").modal("show");
                     }
                 })
             })
 
+            //"更新"按钮单击事件
+
+            $("#saveEditActivityBtn").click(function () {
+                //获取表单信息
+                var id=$("#edit-id").val();
+                var owner = $("#edit-marketActivityOwner").val();
+                var name = $("#edit-marketActivityName").val();
+                var startDate = $("#edit-startDate").val();
+                var endDate = $("#edit-endDate").val();
+                var cost = $("#edit-cost").val();
+                var description = $("#edit-description").val();
+
+                //表单校验
+                if (name==""){
+                    alert("市场活动名称不能为空")
+                    return;
+                }
+                //校验成本
+                var regExp = /^(([1-9]\d*)|0)$/;
+                if (!regExp.test(cost)) {
+                    alert("成本只能为非负整数");
+                    return;
+                }
+
+                //传递请求
+                $.ajax({
+                    url:'workbench/activity/saveEditAct.do',
+                    data:{
+                        id:id,
+                        owner:owner,
+                        name:name,
+                        startDate:startDate,
+                        endDate:endDate,
+                        cost:cost,
+                        description:description
+                    },
+                    type:'post',
+                    dataType:'json',
+
+                    success:function (data) {
+                        if (data.code=="1"){
+                            //关闭模态窗口
+                            $("#editActivityModal").modal("hide");
+                            //刷新市场活动列表,保持页号和每页显示条数都不变
+                            queryActivityByConditionForPage($("#demo_pag1").bs_pagination('getOption', 'currentPage'),$("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
+                        }else{
+                            //提示信息
+                            alert(data.message);
+                            //模态窗口不关闭
+                            $("#editActivityModal").modal("show");
+                        }
+                    }
+                })
+
+
+
+
+            })
             //导出所有的市场活动
             $("#exportActivityAllBtn").click(function () {
-                window.location.href="workbench/activity/exportActivityAll.do";
+                window.location.href = "workbench/activity/exportActivityAll.do";
             })
         });
 
@@ -343,7 +407,7 @@
             <div class="modal-body">
 
                 <form class="form-horizontal" role="form">
-
+                    <input type="hidden" id="edit-id">
                     <div class="form-group">
                         <label for="edit-marketActivityOwner" class="col-sm-2 control-label">所有者<span
                                 style="font-size: 15px; color: red;">*</span></label>
@@ -391,7 +455,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">更新</button>
+                <button type="button" class="btn btn-primary" id="saveEditActivityBtn">更新</button>
             </div>
         </div>
     </div>

@@ -30,4 +30,6 @@ public interface ActService {
     Act queryActById(String id);
 
     Act queryActForDetailByActId(String id);
+
+    int saveEditAct(Act act);
 }

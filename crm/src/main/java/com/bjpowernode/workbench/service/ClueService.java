@@ -2,6 +2,9 @@ package com.bjpowernode.workbench.service;
 
 import com.bjpowernode.workbench.beans.Clue;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * ClassName:ClueService
  * Package:com.bjpowernode.workbench.service
@@ -12,4 +15,8 @@ import com.bjpowernode.workbench.beans.Clue;
  */
 public interface ClueService {
     int saveClue(Clue clue);
+    List<Clue> queryClueListByPage(Map map);
+
+    int queryCountClueListByPage(Map map);
+
 }

@@ -216,9 +216,11 @@ JOIN tbl_user u1 ON a.owner = u1.id
   <if test="owner!=null and owner!=''">
     and u1.name like '%' #{owner} '%'
   </if>
+
   <if test="startDate!=null and startDate!=''">
     and a.start_date&gt;=#{startDate}
   </if>
+
   <if test="endDate!=null and endDate!=''">
     and a.end_date&lt;=#{endDate}
   </if>
@@ -281,4 +283,17 @@ JOIN tbl_user u1 ON a.owner = u1.id
     join tbl_user u on a.owner = u.id
     where a.id = #{id}
   </select>
+
+  <update id="updateAct" parameterType="act">
+     update tbl_activity
+      set owner = #{owner,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=CHAR},
+      end_date = #{endDate,jdbcType=CHAR},
+      cost = #{cost,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      edit_time = #{editTime,jdbcType=CHAR},
+      edit_by = #{editBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=CHAR}
+  </update>
 </mapper>

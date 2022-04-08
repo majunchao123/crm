@@ -79,4 +79,6 @@ public interface ActMapper {
     int deleteActByIds(String[] id);
 
     Act selectActForDetailByActId(String id);
+
+    int updateAct(Act act);
 }

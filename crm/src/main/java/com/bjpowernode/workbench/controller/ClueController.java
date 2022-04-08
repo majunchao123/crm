@@ -19,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.annotation.ElementType;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ClassName:ClueController
@@ -62,13 +64,49 @@ public class ClueController {
         clue.setCreateBy(user.getName());
         clue.setCreateTime(DateUtils.formatDateAndTime(new Date()));
         int i = clueService.saveClue(clue);
-        if (i>0) {
+        if (i > 0) {
             returnObject.setCode("1");
-        }else {
+        } else {
             returnObject.setCode("0");
             returnObject.setMessage("系统繁忙，稍后再试");
         }
         return returnObject;
     }
+
+
+    @RequestMapping("workbench/clue/queryClueForPage.do")
+    @ResponseBody
+    public Object queryClueForPage(  String fullname,
+                                     String company,
+                                     String mphone,
+                                     String state,
+                                     String source,
+                                     String phone,
+                                     String owner,
+                                     int pageNo,
+                                     int pageSize)
+    {
+        //封装参数
+        Map<String,Object> map=new HashMap();
+        map.put("fullname",fullname);
+        map.put("company",company);
+        map.put("mphone",mphone);
+        map.put("state",state);
+        map.put("source",source);
+        map.put("phone",phone);
+        map.put("owner",owner);
+        map.put("beginNo",(pageNo-1)*pageSize);
+        map.put("pageSize",pageSize);
+
+        //查询数据库 获取数据
+        List<Clue> clueList = clueService.queryClueListByPage(map);
+        //获取总行数
+        int totalRows = clueService.queryCountClueListByPage(map);
+        HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        hashMap.put("clueList",clueList);
+        hashMap.put("totalRows",totalRows);
+        return hashMap;
+    }
+
 
 }
