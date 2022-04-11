@@ -310,7 +310,7 @@
 
   <select id="selectClueListByPage" parameterType="map" resultMap="BaseResultMap">
     select c.fullname,v1.value as appellation,u1.name as owner,c.company,
-       c.phone,c.mphone,v2.value as state, v3.value as source
+       c.phone,c.mphone,v2.value as state, v3.value as source,c.id
     from tbl_clue c
     left join tbl_dic_value v1 on c.appellation=v1.id
     join tbl_user u1 on c.owner=u1.id
@@ -374,4 +374,18 @@
       </if>
     </where>
   </select>
+
+
+  <select id="selectClueDetailById" parameterType="String" resultMap="BaseResultMap">
+ select c.id,c.fullname,dv1.value as appellation,u1.name as owner,c.company,c.job,c.email,c.phone,c.website,
+          c.mphone,dv2.value as state,dv3.value as source, c.create_by,c.create_time,c.edit_by,
+          c.edit_time,c.description,c.contact_summary,c.next_contact_time,c.address
+    from tbl_clue c
+    left join tbl_dic_value dv1 on c.appellation=dv1.id
+    join tbl_user u1 on c.owner=u1.id
+    left join tbl_dic_value dv2 on c.state=dv2.id
+    left join tbl_dic_value dv3 on c.source=dv3.id
+    where c.id=#{id}
+  </select>
+
 </mapper>

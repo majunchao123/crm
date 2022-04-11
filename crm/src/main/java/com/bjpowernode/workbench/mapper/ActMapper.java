@@ -81,4 +81,12 @@ public interface ActMapper {
     Act selectActForDetailByActId(String id);
 
     int updateAct(Act act);
+
+    List<Act> selectActListByClueId(String clueId);
+
+    List<Act> selectActivityForDetailByNameClueId(Map map);
+
+    List<Act> selectActListByIds(String[] ids);
+
+
 }

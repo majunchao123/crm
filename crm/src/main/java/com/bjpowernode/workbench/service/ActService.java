@@ -32,4 +32,9 @@ public interface ActService {
     Act queryActForDetailByActId(String id);
 
     int saveEditAct(Act act);
+
+    List<Act> queryActListByClueId(String clueId);
+
+    List<Act> queryActivityForDetailByNameClueId(Map map);
+    List<Act> QueryActListByIds(String[] id);
 }

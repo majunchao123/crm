@@ -296,4 +296,38 @@ JOIN tbl_user u1 ON a.owner = u1.id
       edit_by = #{editBy,jdbcType=VARCHAR}
     where id = #{id,jdbcType=CHAR}
   </update>
+
+  <select id="selectActListByClueId" parameterType="String" resultMap="BaseResultMap">
+    select a.id,a.start_date,a.end_date,u.name as owner ,a.name
+    from tbl_activity a
+    join tbl_user u on a.owner = u.id
+    join tbl_clue_activity_relation car on a.id = car.activity_id
+    where car.clue_id=#{clueId}
+  </select>
+  <select id="selectActivityForDetailByNameClueId" parameterType="map" resultMap="BaseResultMap">
+     select a.id,a.start_date,a.end_date,u.name as owner ,a.name
+    from tbl_activity a
+    join tbl_user u on a.owner = u.id
+    where a.name like '%' #{activityName} '%' and a.id not in (
+    select activity_id
+    from tbl_clue_activity_relation
+    where clue_id = #{clueId}
+    )
+  </select>
+
+
+  <select id="selectActListByIds" parameterType="String" resultMap="BaseResultMap">
+    select a.start_date,a.end_date,u.name as owner ,a.name
+    from tbl_activity a
+    join tbl_user u on a.owner = u.id
+    where a.id in
+    <foreach collection="array" item="id" separator="," open="(" close=")">
+      #{id}
+    </foreach>
+
+
+
+
+  </select>
+
 </mapper>

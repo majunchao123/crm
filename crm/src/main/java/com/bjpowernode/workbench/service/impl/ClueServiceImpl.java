@@ -34,5 +34,9 @@ public class ClueServiceImpl implements ClueService {
         return clueMapper.selectCountClueListByPage(map);
     }
 
+    public Clue queryClueDetailById(String id) {
+        return clueMapper.selectClueDetailById(id);
+    }
+
 
 }

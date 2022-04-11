@@ -24,10 +24,6 @@
     <script type="text/javascript">
 
         $(function () {
-            //全选按钮控制 checkbox
-            $("#checkAll").click(function () {
-                $("#tBody input[type='checkbox']").prop("checked", this.checked)
-            })
 
             //当容器加载完成之后，对容器调用工具函数
             $("input[name='mydate']").datetimepicker({
@@ -115,6 +111,12 @@
                 queryActivityByConditionForPage(1, $("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'));
             })
 
+
+
+            //全选按钮控制 checkbox
+            $("#checkAll").click(function () {
+                $("#tBody input[type='checkbox']").prop("checked", this.checked)
+            })
             //单击按钮的控制事件
             $("#tBody").on("click", "input[type='checkbox']", function () {
                 //如果列表中的所有checkbox都选中，则"全选"按钮也选中
@@ -217,7 +219,6 @@
                     alert("成本只能为非负整数");
                     return;
                 }
-
                 //传递请求
                 $.ajax({
                     url:'workbench/activity/saveEditAct.do',

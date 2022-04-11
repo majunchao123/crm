@@ -54,4 +54,16 @@ public class ActServiceImpl implements ActService {
     public int saveEditAct(Act act) {
         return actMapper.updateAct(act);
     }
+
+    public List<Act> queryActListByClueId(String clueId) {
+        return actMapper.selectActListByClueId(clueId);
+    }
+
+    public List<Act> queryActivityForDetailByNameClueId(Map map) {
+        return actMapper.selectActivityForDetailByNameClueId(map);
+    }
+
+    public List<Act> QueryActListByIds(String[] id) {
+        return actMapper.selectActListByIds(id);
+    }
 }

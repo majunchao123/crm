@@ -1,5 +1,6 @@
 package com.bjpowernode.workbench.mapper;
 
+import com.bjpowernode.workbench.beans.Act;
 import com.bjpowernode.workbench.beans.Clue;
 
 import java.util.List;
@@ -67,4 +68,7 @@ public interface ClueMapper {
      * @return
      */
     int selectCountClueListByPage(Map map);
+
+    Clue selectClueDetailById(String id);
+
 }

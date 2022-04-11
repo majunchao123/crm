@@ -100,7 +100,7 @@
                             //关闭模态窗口
                             $("#createClueModal").modal("hide");
                             //刷新线索列表，显示第一页数据，保持每页显示条数不变
-
+                            queryClueByConditionForPage(1, $("#demo_pag1").bs_pagination('getOption', 'rowsPerPage'))
                         } else {
                             alert(data.message);
                             $("#createClueModal").modal("show");
@@ -166,7 +166,7 @@
                     $.each(data.clueList, function (index, obj) {
                         htmlStr += "<tr class=\"active\">"
                         htmlStr += "<td><input type=\"checkbox\"/></td>"
-                        htmlStr += "<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='workbench/activity/detailClue.do?id=" + obj.id + "'\">" + obj.fullname + "</a></td>";
+                        htmlStr += "<td><a style=\"text-decoration: none; cursor: pointer;\" onclick=\"window.location.href='workbench/clue/detailClueIndex?id=" + obj.id + "'\">" + obj.fullname + "</a></td>";
                         htmlStr += "<td>" + obj.company + "</td>"
                         htmlStr += "<td>" + obj.mphone + "</td>"
                         htmlStr += "<td>" + obj.phone + "</td>"
@@ -546,7 +546,8 @@
                     <div class="input-group">
                         <div class="input-group-addon">线索来源</div>
                         <select class="form-control" id="query-source">
-                            <c:forEach items="${sourceList}" var="sl">
+                            <option></option>
+                            <c:forEach items="${source}" var="sl">
                                 <option value="${sl.id}">${sl.value}</option>
                             </c:forEach>
                         </select>
@@ -575,7 +576,8 @@
                     <div class="input-group">
                         <div class="input-group-addon">线索状态</div>
                         <select class="form-control" id="query-state">
-                            <c:forEach items="${clueStateList}" var="cs">
+                            <option></option>
+                            <c:forEach items="${clueState}" var="cs">
                                 <option value="${cs.id}">${cs.value}</option>
                             </c:forEach>
                         </select>

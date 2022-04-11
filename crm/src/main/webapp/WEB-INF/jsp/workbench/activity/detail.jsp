@@ -63,7 +63,6 @@
 
 
             //给保存remark按钮添加单击事件
-
             $("#saveActRemarkBtn").click(function () {
                 //收集参数
                 var noteContent = $.trim($("#remark").val());
@@ -74,8 +73,6 @@
                     alert("评论不能为空。")
                     return;
                 }
-
-
                 //发送请求
                 $.ajax({
                     url: 'workbench/activity/saveCreateActivityRemark.do',
@@ -180,14 +177,8 @@
                             //模态窗口不关闭
                             $("#editRemarkModal").modal("show");
                         }
-
-
                     }
-
-
                 })
-
-
             })
         });
     </script>

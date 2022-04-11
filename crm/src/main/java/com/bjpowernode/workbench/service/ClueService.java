@@ -14,9 +14,13 @@ import java.util.Map;
  * @author:白白白
  */
 public interface ClueService {
+
     int saveClue(Clue clue);
+
     List<Clue> queryClueListByPage(Map map);
 
     int queryCountClueListByPage(Map map);
+
+    Clue queryClueDetailById(String id);
 
 }
