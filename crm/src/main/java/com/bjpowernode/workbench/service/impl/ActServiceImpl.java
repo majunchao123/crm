@@ -66,4 +66,8 @@ public class ActServiceImpl implements ActService {
     public List<Act> QueryActListByIds(String[] id) {
         return actMapper.selectActListByIds(id);
     }
+
+    public List<Act> queryIncludeActivityForDetailByNameClueId(Map map) {
+        return actMapper.selectIncludeActivityForDetailByNameClueId(map);
+    }
 }

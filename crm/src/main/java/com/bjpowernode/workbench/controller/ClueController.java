@@ -8,10 +8,7 @@ import com.bjpowernode.settings.beans.DicValue;
 import com.bjpowernode.settings.beans.User;
 import com.bjpowernode.settings.service.DicValueService;
 import com.bjpowernode.settings.service.UserService;
-import com.bjpowernode.workbench.beans.Act;
-import com.bjpowernode.workbench.beans.Clue;
-import com.bjpowernode.workbench.beans.ClueActivityRelation;
-import com.bjpowernode.workbench.beans.ClueRemark;
+import com.bjpowernode.workbench.beans.*;
 import com.bjpowernode.workbench.service.ActService;
 import com.bjpowernode.workbench.service.ClueActivityRelationService;
 import com.bjpowernode.workbench.service.ClueRemarkService;
@@ -171,8 +168,61 @@ public class ClueController {
             returnObject.setOtherData("系统繁忙，稍后再试");
         }
         return returnObject;
+    }
+    @RequestMapping("workbench/clue/convertTo.do")
+    public Object convertTo(String id,HttpServletRequest request){
+        Clue clue = clueService.queryClueDetailById(id);
+        List<DicValue> valueList = dicValueService.queryDicValueListByTypeCode("stage");
+        request.setAttribute("clue",clue);
+        request.setAttribute("valueList",valueList);
 
+        return "workbench/clue/convert";
+    }
+
+    @RequestMapping("workbench/clue/queryIncludeActivityByNameClueId.do")
+    @ResponseBody
+    public Object queryIncludeActivityByNameClueId(String activityName,String clueId){
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("activityName",activityName);
+        map.put("clueId",clueId);
+        List<Act> actList = actService.queryIncludeActivityForDetailByNameClueId(map);
+        return actList;
+    }
+
+    @RequestMapping("workbench/clue/convertClue.do")
+    @ResponseBody
+    public Object convertClue(String clueId,
+                              String money,String name,
+                              String expectedDate,
+                              String stage,String activityId,String isCreateTran,HttpSession session){
+
+
+        //封装参数
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("clueId",clueId);
+        map.put("money",money);
+        map.put("name",name);
+        map.put("expectedDate",expectedDate);
+        map.put("stage",stage);
+        map.put("activityId",activityId);
+        map.put("isCreateTran",isCreateTran);
+        map.put(Constant.SESSION_USER,session.getAttribute(Constant.SESSION_USER));
+        ReturnObject returnObject = new ReturnObject();
+        try {
+            clueService.saveConvertClue(map);
+            returnObject.setCode(Constant.RETURN_OBJECT_CODE_SUC);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            returnObject.setCode(Constant.RETURN_OBJECT_CODE_FAIL);
+            returnObject.setMessage("系统忙，稍后再试");
+        }
+        return returnObject;
 
     }
+
+
+
+
 
 }

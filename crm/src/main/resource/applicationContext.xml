@@ -33,6 +33,9 @@
         <property name="typeAliasesPackage" value="com.bjpowernode.settings.beans
                                                    com.bjpowernode.workbench.beans     "/>
     </bean>
+
+
+
     <!-- 配置Spring整合MyBatis，扫描包 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <!--注册MyBatis的映射文件-->

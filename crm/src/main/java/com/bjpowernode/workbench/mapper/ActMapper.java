@@ -88,5 +88,7 @@ public interface ActMapper {
 
     List<Act> selectActListByIds(String[] ids);
 
+    List<Act> selectIncludeActivityForDetailByNameClueId(Map map);
+
 
 }

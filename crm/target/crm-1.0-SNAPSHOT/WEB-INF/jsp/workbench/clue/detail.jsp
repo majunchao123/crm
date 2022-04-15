@@ -212,6 +212,15 @@
                     }
                 })
             })
+
+            //给转换按钮添加点击事件
+            $("#coverIntoBtn").click(function () {
+                //收集参数
+                var clueId = '${clue.id}';
+                //点击跳转
+                window.location.href = "workbench/clue/convertTo.do?id="+clueId;
+
+            })
         });
 
 
@@ -320,7 +329,7 @@
         <h3>${clue.fullname} <small>${clue.company}</small></h3>
     </div>
     <div style="position: relative; height: 50px; width: 500px;  top: -72px; left: 700px;">
-        <button type="button" class="btn btn-default" onclick="window.location.href='convert.html';"><span
+        <button type="button" class="btn btn-default" id="coverIntoBtn"><span
                 class="glyphicon glyphicon-retweet"></span> 转换
         </button>
     </div>

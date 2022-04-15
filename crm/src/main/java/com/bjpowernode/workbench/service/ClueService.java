@@ -23,4 +23,6 @@ public interface ClueService {
 
     Clue queryClueDetailById(String id);
 
+    void saveConvertClue(Map map);
+
 }

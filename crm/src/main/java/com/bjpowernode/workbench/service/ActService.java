@@ -37,4 +37,8 @@ public interface ActService {
 
     List<Act> queryActivityForDetailByNameClueId(Map map);
     List<Act> QueryActListByIds(String[] id);
+
+    List<Act> queryIncludeActivityForDetailByNameClueId(Map map);
+
+
 }
