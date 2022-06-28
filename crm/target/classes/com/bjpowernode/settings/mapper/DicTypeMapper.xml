@@ -108,4 +108,13 @@
       description = #{description,jdbcType=VARCHAR}
     where code = #{code,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectAllDicType" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"></include>
+    from
+    tbl_dic_type
+  </select>
+
+
 </mapper>

@@ -121,7 +121,7 @@
             $("#tBody").on("click", "input[type='checkbox']", function () {
                 //如果列表中的所有checkbox都选中，则"全选"按钮也选中
                 if ($("#tBody input[type='checkbox']").size() == $("#tBody input[type='checkbox']:checked").size()) {
-                    $("#checkAll").prop("checked", true);
+                     $("#checkAll").prop("checked", true);
                 } else {//如果列表中的所有checkbox至少有一个没选中，则"全选"按钮也取消
                     $("#checkAll").prop("checked", false);
                 }
@@ -137,9 +137,10 @@
                     alert("请选择要删除的活动");
                     return;
                 }
+
+
                 //遍历选择的删除按钮
                 var ids = "";
-
                 if (window.confirm("确定删除吗?")) {
                     $.each(checkedIds, function () {
                         ids += "id=" + this.value + "&";

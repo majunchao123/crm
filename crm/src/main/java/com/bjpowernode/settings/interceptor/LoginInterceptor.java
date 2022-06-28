@@ -16,8 +16,6 @@ import javax.servlet.http.HttpSession;
  * @author:白白白
  */
 public class LoginInterceptor implements HandlerInterceptor {
-
-
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
         Object attribute = session.getAttribute(Constant.SESSION_USER);

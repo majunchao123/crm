@@ -1,4 +1,4 @@
-package com.bjpowernode.settings.service.impl;
+package com.bjpowernode.workbench.service.impl;
 
 import com.bjpowernode.workbench.beans.ClueActivityRelation;
 import com.bjpowernode.workbench.mapper.ClueActivityRelationMapper;

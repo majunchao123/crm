@@ -42,7 +42,6 @@ public class ActController {
     UserService userService;
     @Autowired
     ActService actService;
-
     @Autowired
     ActRemarkService actRemarkService;
 

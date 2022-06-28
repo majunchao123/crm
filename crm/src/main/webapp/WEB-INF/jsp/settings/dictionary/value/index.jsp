@@ -1,11 +1,25 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
+<%
+String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+%>
 <html>
 <head>
+	<base href="<%=basePath%>">
 <meta charset="UTF-8">
-<link href="../../../jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 
-<script type="text/javascript" src="../../../jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="../../../jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
+<script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+
+	<script type="text/javascript">
+
+
+
+
+
+	</script>
 </head>
 <body>
 
@@ -36,7 +50,21 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr class="active">
+			<c:forEach items="${dicValueList}" var="t" varStatus="sta">
+				<tr class="${sta.index%2==0?"active":""}">
+					<td><input type="checkbox" /></td>
+					<td>${sta.count}</td>
+					<td>${t.value}</td>
+					<td>${t.text}</td>
+					<td>${t.orderNo}</td>
+					<td>${t.typeCode}</td>
+				</tr>
+			</c:forEach>
+
+
+
+
+				<%--<tr class="active">
 					<td><input type="checkbox" /></td>
 					<td>1</td>
 					<td>m</td>
@@ -75,7 +103,10 @@
 					<td>三级部门</td>
 					<td>3</td>
 					<td>orgType</td>
-				</tr>
+				</tr>--%>
+
+
+
 			</tbody>
 		</table>
 	</div>

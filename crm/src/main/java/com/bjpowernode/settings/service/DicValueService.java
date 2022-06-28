@@ -14,4 +14,5 @@ import java.util.List;
  */
 public interface DicValueService {
     List<DicValue> queryDicValueListByTypeCode(String typeCode);
+    List<DicValue> queryAllDicValueList();
 }

@@ -54,4 +54,6 @@ public interface DicValueMapper {
     int updateByPrimaryKey(DicValue record);
 
     List<DicValue> selectDicValueListByTypeCode(String typeCode);
+
+    List<DicValue> selectAllDicValueList();
 }

@@ -118,4 +118,20 @@
     (#{obj.id},#{obj.clueId},#{obj.activityId})
     </foreach>
   </insert>
+
+  <select id="selectClueActRelationListByClueId" parameterType="String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tbl_clue_activity_relation
+    where clue_id = #{clueId}
+  </select>
+
+  <delete id="deleteClueActRelationByClueId" >
+       delete from tbl_clue_activity_relation
+    where clue_id = #{clueId}
+  </delete>
+
+
+
+
 </mapper>

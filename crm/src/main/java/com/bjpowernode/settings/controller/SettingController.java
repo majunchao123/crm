@@ -18,4 +18,9 @@ public class SettingController {
     public String index() {
         return "settings/index";
     }
+
+    @RequestMapping("settings/dictionary/index.do")
+    public String DicIndexView(){
+        return "settings/dictionary/index";
+    }
 }
